@@ -19,6 +19,7 @@ double drandom()
 
     return ret_val;
 }
+
 void seed(double low_in, double hi_in)
 {
     // Set the lower and upper limits for the random number generator
@@ -53,8 +54,6 @@ void compute_average_of_random_numbers(int num_random_numbers, double random_low
     // Compute the average of the random numbers
     *average = sum / num_random_numbers;
 }
-
-
 
 int main()
 {
