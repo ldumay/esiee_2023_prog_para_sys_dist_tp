@@ -47,13 +47,24 @@ int main() {
 	A = (double *)malloc(N*sizeof(double));
 
 	runtime = omp_get_wtime();
-	#pragma omp parallel 
+	#pragma omp parallel sections
 	{
-		// Producer: fill an array of data
-		fill_rand(N, A);
-		// Consumer: sum the array
-		sum = Sum_array(N, A);
-		
+		#pragma omp section
+		{
+			// Producer: fill an array of data
+			fill_rand(N, A);
+			#pragma omp atomic write
+			flag = 1;
+			#pragma omp flush(flag)
+		}
+		#pragma omp section
+		{
+			while (flag == 0) {
+				#pragma omp flush(flag)
+			}
+			// Consumer: sum the array
+			sum = Sum_array(N, A);
+		}
 	}
 	runtime = omp_get_wtime() - runtime;
 	printf(" In %f seconds, The sum is %f \n", runtime, sum);
