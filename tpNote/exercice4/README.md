@@ -11,8 +11,7 @@
 
 ```
 cd tpNote/exercice4/
-gcc -fopenmp random.c -o random.out && ls | grep 'random.out' && ./random.out
-gcc -fopenmp pi_mc.c -o pi_mc.out && ls | grep 'pi_mc.out' && ./pi_mc.out
+./start.sh
 ```
 
 > `pi_mc.c` : ok ✔
