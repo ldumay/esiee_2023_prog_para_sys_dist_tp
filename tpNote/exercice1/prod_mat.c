@@ -9,10 +9,10 @@
 
 // Dimension par defaut de la taille des matrices
 #ifndef VAL_M
-#define VAL_M 701
+#define VAL_M 101
 #endif
 #ifndef VAL_N
-#define VAL_N 801
+#define VAL_N 201
 #endif
 
 int main() {
