@@ -13,8 +13,8 @@
 #endif
 #include <stdio.h>
 
+/* Size of the random array */
 #define N        10000
-
 /* Some random number constants from numerical recipies */
 #define SEED       2531
 #define RAND_MULT  1366
@@ -47,14 +47,15 @@ int main() {
 	A = (double *)malloc(N*sizeof(double));
 
 	runtime = omp_get_wtime();
-
-	// Producer: fill an array of data
-	fill_rand(N, A);
-
-	// Consumer: sum the array
-	sum = Sum_array(N, A);
+	#pragma omp parallel 
+	{
+		// Producer: fill an array of data
+		fill_rand(N, A);
+		// Consumer: sum the array
+		sum = Sum_array(N, A);
+		
+	}
 	runtime = omp_get_wtime() - runtime;
-
 	printf(" In %f seconds, The sum is %f \n", runtime, sum);
 }
 
