@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <omp.h>
 #include <sys/time.h>
-#define SIZE 2000
 // Dimension par defaut de la taille des matrices
 #ifndef VAL_M
 #define VAL_M 101
@@ -11,7 +10,15 @@
 #define VAL_N 201
 #endif
 
+double get_time() {
+  struct timeval tv;
+  gettimeofday(&tv, (void *)0);
+  return (double) tv.tv_sec + tv.tv_usec*1e-6;
+
+}
+
 int main(int argc, char **argv){   
+  double t,start,stop;
   int nb, i , j, k;
   int m=VAL_M, n=VAL_N;
 
@@ -33,8 +40,8 @@ int main(int argc, char **argv){
   }
 
   //printf("Nb.threads\tTps.\n");
-
-  #pragma omp parallel for num_threads(100) private(j,k)
+  start = get_time(); 
+  #pragma omp parallel for num_threads(100) private(j,k) schedule(static,10000)
   for(i = 0; i < m; i++){      
     for(j = 0; j < n; j++){
 
@@ -46,8 +53,11 @@ int main(int argc, char **argv){
         matrice_res[i][j] += matrice_A[i][k]*matrice_B[k][j];
       }
     }
-  } 
-  
+  }
+  stop=get_time();
+  t=stop-start;
+  printf("%f",t);
+
    // Impression du resultat.
   fprintf(stdout, "\n\n"
 	  "   Valeurs de m et n   : %5d %5d\n"
