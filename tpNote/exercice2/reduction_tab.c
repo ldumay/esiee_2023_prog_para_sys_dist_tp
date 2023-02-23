@@ -29,7 +29,6 @@ void clear(double* array, int size) {
 }
 
 int main() {
-
 	const int nmolec=VAL_NMOLEC, nmol=VAL_NMOL, n=VAL_N;
 	double tab[nmolec][n][nmol];
 
@@ -44,7 +43,6 @@ int main() {
 
 	double tab1[nmol], tab2[nmol];
 	clear(tab2, nmol);
-
 
 	// Nid de boucle a paralleliser
 	#pragma omp parallel for private(i,j) {
@@ -76,9 +74,10 @@ int main() {
 
 	double err = 0;
 	for(int i=0; i<nmol; i++) {
-	double curr = fabs(tab2c[i] - tab2[i]) / fabs(tab2c[i]);
-	if (curr > err)
-		err = curr;
+		double curr = fabs(tab2c[i] - tab2[i]) / fabs(tab2c[i]);
+		if (curr > err){
+			err = curr;
+		}
 	}
 
 	// Impression du resultat
