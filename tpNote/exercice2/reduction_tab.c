@@ -14,10 +14,10 @@
 
 // Dimension par defaut de la taille des matrices
 #ifndef VAL_NMOLEC
-#define VAL_NMOLEC 10000
+#define VAL_NMOLEC 100
 #endif
 #ifndef VAL_NMOL
-#define VAL_NMOL 10000
+#define VAL_NMOL 100
 #endif
 #ifndef VAL_N
 #define VAL_N 10
