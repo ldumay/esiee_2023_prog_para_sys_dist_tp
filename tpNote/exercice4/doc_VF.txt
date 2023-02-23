@@ -1,0 +1,77 @@
+NAME:
+	Pi_mc:  PI Monte Carlo
+
+Purpose:
+	Ce programme utilise un algorithme de Monte Carlo pour calculer PI,
+	exemple de la façon dont les générateurs de nombres aléatoires sont utilisés pour résoudre des problèmes.
+	Notez que si votre objectif est de trouver les chiffres de pi, 
+	il existe de bien meilleurs algorithmes que vous pourriez utiliser.
+
+Usage:
+	Pour que le programme reste aussi simple que possible,
+	vous devez éditer le fichier et modifier la valeur de num_trials pour changer le nombre d'échantillons utilisés. 
+	Ensuite, compilez et exécutez le programme.
+
+Algorithm:
+	L'idée de base de l'algorithme est facile à visualiser.  
+	Dessinez un carré sur un mur.  
+	À l'intérieur du carré, dessinez un cercle. 
+
+	Maintenant, lancez aléatoirement fléchettes sur le mur. 
+	Certaines fléchettes vont atterrir à l'intérieur du carré.  
+	Parmi celles-ci, certaines tomberont à l'intérieur du cercle.   
+
+	La probabilité d'atterrir à l'intérieur le cercle ou le carré est proportionnelle à leur surface.
+
+	Nous pouvons utiliser un générateur de nombres aléatoires pour "lancer les fléchettes" et compter
+	combien de "fléchettes" tombent dans le carré et combien dans le cercle.
+	En divisant ces deux nombres, nous obtenons le rapport de leurs surfaces.
+	Et à partir de là, nous pouvons calculer pi.
+
+Algorithm details:
+	Pour transformer cela en code, j'ai besoin d'un peu plus de détails. 
+	Supposons que le cercle est centré à l'intérieur du carré. 
+	Le cercle aura un rayon de r et chaque côté du carré aura une aire de 2*r (c'est-à-dire le diamètre du cercle).
+
+		A(circle) = pi * r^2
+		A(square) = (2*r)*(2*r) = 4*r^2
+
+		ratio = A(circle)/A(square) = pi/4
+
+	Puisque la probabilité (P) qu'une fléchette tombe à l'intérieur d'une figure (c'est-à-dire le carré ou le cercle)
+	est proportionnelle à l'aire, nous avons :
+
+		ratio = P(circle)/P(square) = pi/4
+
+	Si je lance N fléchettes calculées par des nombres aléatoires répartis uniformément sur la surface du carré
+
+		P(sqaure) = N/N    .... i.e. every dart lands in the square
+		P(circle) = N(circle)/N
+
+		ratio = (N(circle)/N)/(N/N)  = N(circle)/N
+
+	Donc, pour trouver l'aire, je calcule N "fléchettes" aléatoires et je compte combien tombent
+	à l'intérieur du cercle.  L'équation d'un cercle est :
+
+		x^2 + y^2 = r^2 
+
+	Donc je calcule aléatoirement "x" et "y" répartis uniformément de -r à r et 
+	je compte la "fléchette" comme tombant à l'intérieur de la cicle si
+
+		x^2 + y^2 < or = r
+
+Results:  
+	Rappelez-vous, notre but est de démontrer un simple algorithme Monte-Carlo, 
+	pas de calculer pi.  Mais juste pour mémoire, voici quelques résultats (compilateur Intel
+	version 10.0, Windows XP, ordinateur portable core duo)
+
+		100        3.160000
+		1000       3.148000
+		10000      3.154000
+		100000     3.139920
+		1000000    3.141456
+		10000000   3.141590
+		100000000  3.141581
+
+	À titre de référence, les 7 premiers chiffres de la vraie valeur de pi 
+	est de 3,141592
