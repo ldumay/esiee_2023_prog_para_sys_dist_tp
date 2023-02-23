@@ -2,7 +2,7 @@
 
 gcc prod_mat.c -o prod_mat.out -fopenmp
 
-if [ -f "prod_cons.out" ];
+if [ -f "prod_mat.out" ];
 then
 	./prod_mat.out
 else
