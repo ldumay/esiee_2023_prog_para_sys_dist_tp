@@ -24,7 +24,9 @@ int main ()
 
 		test = x*x + y*y;
 
-		if (test <= r*r) Ncirc++;
+		if (test <= r*r) {
+			Ncirc++;
+		}
 	}
 
 	pi = 4.0 * ((double)Ncirc/(double)num_trials);

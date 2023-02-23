@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc pi_mc.c -o pi_mc.out -fopenmp
+gcc -Wall pi_mc.c random.c -o pi_mc.out -fopenmp
 
 if [ -f "pi_mc.out" ];
 then
