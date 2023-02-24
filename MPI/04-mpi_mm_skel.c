@@ -11,9 +11,9 @@
 #include <malloc.h>
 
 
-#define NRA 8                 /* number of rows in matrix A */
-#define NCA 4                 /* number of columns in matrix A */
-#define NCB 6                  /* number of columns in matrix B */
+#define NRA 12                 /* number of rows in matrix A */
+#define NCA 6                 /* number of columns in matrix A */
+#define NCB 8                  /* number of columns in matrix B */
 #define MASTER 0               /* taskid of first task */
 #define FROM_MASTER 1          /* setting a message type */
 #define FROM_WORKER 2          /* setting a message type */
@@ -91,7 +91,7 @@ int main (int argc, char *argv[]) {
 		int worker_task[NRA];
 		int worker_num = 0;
 		for (i=0; i<NRA; i++) {
-			if (i == MASTER) {
+			if (worker_num == MASTER) {
 				// Move in table
 				worker_num = (++worker_num) % numtasks;
 			}
@@ -111,16 +111,16 @@ int main (int argc, char *argv[]) {
 		// MPI_Broad();
 		// Send a portition of A to each process
 		for (i=0; i < NCA; i++) {
-			worker_num++;
-			if (i == MASTER) {
-				worker_num--;
-				continue;
+			while (worker_num == MASTER) {
+				worker_num = (++worker_num) % numtasks;
 			}
 			rows = NCA;
-			printf("Task %d\twork on %d rows\n", i, rows);
-			MPI_Send(&rows, 1, MPI_INT, i, mtype, MPI_COMM_WORLD);
-			double* worker_task = (double*)malloc(rows * sizeof(double));
-			MPI_Send(worker_task, rows, MPI_DOUBLE, i, mtype, MPI_COMM_WORLD);
+			printf("Task %d\twork on %d rows\n", worker_num, rows);
+			MPI_Send(&rows, 1, MPI_INT, worker_num, mtype, MPI_COMM_WORLD);
+			double* worker_task = a[i];
+			MPI_Send(worker_task, rows, MPI_DOUBLE, worker_num, mtype, MPI_COMM_WORLD);
+			// Move in table
+			worker_num = (++worker_num) % numtasks;
 		}
 
 		// Wait for all requests to finish
@@ -202,16 +202,18 @@ int main (int argc, char *argv[]) {
 
 		/* Receive chunk of a and whole b */
 		// Temporary use of t due to data type
+		printf("%d\tReceive data from %d of size %d\n", taskid, MASTER, rows);
 		MPI_Recv(t, rows, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD, &status);
 		printf("%d\tReceive data from %d of size %d\n", taskid, MASTER, rows);
 
 		// Allocate space for the chunk of c to calculate 
 		c = (double**)malloc(rows*sizeof(double*));
-		double *tc = (double *)malloc(rows * NCB * sizeof(double));	
+		double *tc = (double *)malloc(rows * NCB * sizeof(double));
 
 		for (i=0;i<rows;i++) {
 			c[i] = &(tc[i*NCB]);
 		}
+
 		/* Calculate the matrix product */
 		// To calculate, go into each a element and multiply by b column
 		for(i=0;i<rows;i++){
