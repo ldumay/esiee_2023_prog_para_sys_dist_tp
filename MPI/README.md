@@ -3,6 +3,5 @@
 ## Compilation et exécution
 
 ```
-mpicc 01-txrx.c -o 10-txrx_exe
-mpirun -np 4 10-txrx_exe
+./start.sh 01-txrx 4
 ```
