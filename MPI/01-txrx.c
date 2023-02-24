@@ -18,8 +18,11 @@ void run( const int myid,const int nprocs) {
    if ( myid != 0) {
       int valrx;
       MPI_Status status;
-      MPI_Recv(&valrx ,1, MPI_INT,0, MPI_TAG_VALUE, MPI_COMM_WORLD, &status);
-      printf("proc %d received the value %d\n",myid,valrx); 
+      MPI_Recv(&valrx ,1, MPI_INT,0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+
+      printf("proc %d received the source %d\n",myid,status.MPI_SOURCE);
+
+      //printf("proc %d received the value %d\n",myid,valrx); 
    }
 }
 
