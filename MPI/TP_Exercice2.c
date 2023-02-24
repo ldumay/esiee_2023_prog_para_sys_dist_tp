@@ -6,17 +6,17 @@
 
 void run( const int myid,const int nprocs) {
 	if ( myid == 0) {
+		// Create an array
 		int* valtx;
-
         // Allocate memory for the array
         valtx = (int*) malloc(nprocs * sizeof(int));
-
         // Initialize the array
         for (int i = 1; i < nprocs; i++) {
             valtx[i] = i*10;
         }
         // Send the array
         for (int dest = 1; dest < nprocs; dest++) {
+			// Send the value
             MPI_Send(&valtx[dest] ,1, MPI_INT ,dest, MPI_TAG_VALUE, MPI_COMM_WORLD);
             //printf("proc %d sent the value %d to proc %d\n",myid,valtx,source);
 		}
