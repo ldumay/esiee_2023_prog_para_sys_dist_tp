@@ -1,17 +1,24 @@
 # include <mpi.h>
 # include <stdio.h>
+# include <stdlib.h>
 
 # define MPI_TAG_VALUE 123456
 	
 void run( const int myid,const int nprocs) {
    if ( myid == 0) {
-      int valtx;
+      
+      int* valtx;
 
-      valtx = 3785;
+     // Allocate memory for the array
+      valtx = (int*) malloc(nprocs * sizeof(int));
 
-      for (int source = 1; source < nprocs; source++) {
-         MPI_Send(&valtx ,1, MPI_INT ,source, MPI_TAG_VALUE, MPI_COMM_WORLD);
-         valtx++;
+      // Initialize the array
+      for (int i = 1; i < nprocs; i++) {
+         valtx[i] = i*10;
+      }
+      
+      for (int dest = 1; dest < nprocs; dest++) {
+         MPI_Send(&valtx[dest] ,1, MPI_INT ,dest, MPI_TAG_VALUE, MPI_COMM_WORLD);
       }
    }
 
@@ -20,9 +27,7 @@ void run( const int myid,const int nprocs) {
       MPI_Status status;
       MPI_Recv(&valrx ,1, MPI_INT,0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 
-      printf("proc %d received the source %d\n",myid,status.MPI_SOURCE);
-
-      //printf("proc %d received the value %d\n",myid,valrx); 
+      printf("proc %d received the source %d with the value %d\n",myid,status.MPI_SOURCE,valrx);
    }
 }
 
