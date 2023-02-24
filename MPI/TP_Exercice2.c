@@ -6,7 +6,7 @@
 
 void run( const int myid,const int nprocs) {
 	if ( myid == 0) {
-		int* valtx = 3785;
+		int* valtx;
 
         // Allocate memory for the array
         valtx = (int*) malloc(nprocs * sizeof(int));
