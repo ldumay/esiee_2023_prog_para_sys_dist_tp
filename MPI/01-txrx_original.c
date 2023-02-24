@@ -1,6 +1,10 @@
 # include <mpi.h>
 # include <stdio.h>
 
+/*
+ * CODE ORIGINAL
+ */
+
 # define MPI_TAG_VALUE 123456
 	
 void run( const int myid) {
